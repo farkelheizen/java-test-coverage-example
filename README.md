@@ -6,6 +6,26 @@ A Java 21 Maven project designed for testing autonomous agentic test-coverage cr
 
 This project contains **100 dummy Java classes** that compile and execute correctly, but intentionally have no test coverage (except a single placeholder test). The purpose is to serve as a target for AI agents to automatically generate meaningful test cases.
 
+## Agent Usage
+
+This repository includes a custom Copilot agent named `coverage-coordinator` under `.github/agents/`.
+
+Quick start in VS Code:
+
+```text
+/agent coverage-coordinator Target com.example.service and com.example.util, limit to 8 classes total, stop once both packages exceed 70% coverage.
+```
+
+Quick start on GitHub:
+
+```text
+@copilot Please invoke /agent coverage-coordinator.
+
+Target com.example.service and com.example.util, limit the run to 8 classes total, stop once those packages exceed 70% coverage, and ensure mvn clean test passes before finishing.
+```
+
+Detailed instructions and more examples are in [docs/how-to-kick-off-the-autonomous-swarm.md](docs/how-to-kick-off-the-autonomous-swarm.md).
+
 ## Project Structure
 
 ```
