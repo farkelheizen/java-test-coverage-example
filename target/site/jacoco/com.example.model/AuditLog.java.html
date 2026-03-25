@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuditLog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.model</a> &gt; <span class="el_source">AuditLog.java</span></div><h1>AuditLog.java</h1><pre class="source lang-java linenums">package com.example.model;
+
+import java.time.LocalDateTime;
+
+public class AuditLog {
+    private String logId;
+    private String entityType;
+    private long entityId;
+    private String action;
+    private long performedBy;
+    private LocalDateTime timestamp;
+    private String oldValue;
+    private String newValue;
+
+<span class="nc" id="L15">    public AuditLog() {}</span>
+
+    public AuditLog(String logId, String entityType, long entityId, String action,
+<span class="nc" id="L18">                    long performedBy, LocalDateTime timestamp, String oldValue, String newValue) {</span>
+<span class="nc" id="L19">        this.logId = logId;</span>
+<span class="nc" id="L20">        this.entityType = entityType;</span>
+<span class="nc" id="L21">        this.entityId = entityId;</span>
+<span class="nc" id="L22">        this.action = action;</span>
+<span class="nc" id="L23">        this.performedBy = performedBy;</span>
+<span class="nc" id="L24">        this.timestamp = timestamp;</span>
+<span class="nc" id="L25">        this.oldValue = oldValue;</span>
+<span class="nc" id="L26">        this.newValue = newValue;</span>
+<span class="nc" id="L27">    }</span>
+
+<span class="nc" id="L29">    public String getLogId() { return logId; }</span>
+<span class="nc" id="L30">    public void setLogId(String logId) { this.logId = logId; }</span>
+<span class="nc" id="L31">    public String getEntityType() { return entityType; }</span>
+<span class="nc" id="L32">    public void setEntityType(String entityType) { this.entityType = entityType; }</span>
+<span class="nc" id="L33">    public long getEntityId() { return entityId; }</span>
+<span class="nc" id="L34">    public void setEntityId(long entityId) { this.entityId = entityId; }</span>
+<span class="nc" id="L35">    public String getAction() { return action; }</span>
+<span class="nc" id="L36">    public void setAction(String action) { this.action = action; }</span>
+<span class="nc" id="L37">    public long getPerformedBy() { return performedBy; }</span>
+<span class="nc" id="L38">    public void setPerformedBy(long performedBy) { this.performedBy = performedBy; }</span>
+<span class="nc" id="L39">    public LocalDateTime getTimestamp() { return timestamp; }</span>
+<span class="nc" id="L40">    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }</span>
+<span class="nc" id="L41">    public String getOldValue() { return oldValue; }</span>
+<span class="nc" id="L42">    public void setOldValue(String oldValue) { this.oldValue = oldValue; }</span>
+<span class="nc" id="L43">    public String getNewValue() { return newValue; }</span>
+<span class="nc" id="L44">    public void setNewValue(String newValue) { this.newValue = newValue; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

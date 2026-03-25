@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shipment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.model</a> &gt; <span class="el_source">Shipment.java</span></div><h1>Shipment.java</h1><pre class="source lang-java linenums">package com.example.model;
+
+import java.time.LocalDate;
+
+public class Shipment {
+    private String shipmentId;
+    private Order order;
+    private String trackingNumber;
+    private String carrier;
+    private LocalDate estimatedDelivery;
+    private LocalDate actualDelivery;
+    private boolean isDelivered;
+
+<span class="nc" id="L14">    public Shipment() {}</span>
+
+    public Shipment(String shipmentId, Order order, String trackingNumber, String carrier,
+<span class="nc" id="L17">                    LocalDate estimatedDelivery, LocalDate actualDelivery, boolean isDelivered) {</span>
+<span class="nc" id="L18">        this.shipmentId = shipmentId;</span>
+<span class="nc" id="L19">        this.order = order;</span>
+<span class="nc" id="L20">        this.trackingNumber = trackingNumber;</span>
+<span class="nc" id="L21">        this.carrier = carrier;</span>
+<span class="nc" id="L22">        this.estimatedDelivery = estimatedDelivery;</span>
+<span class="nc" id="L23">        this.actualDelivery = actualDelivery;</span>
+<span class="nc" id="L24">        this.isDelivered = isDelivered;</span>
+<span class="nc" id="L25">    }</span>
+
+<span class="nc" id="L27">    public String getShipmentId() { return shipmentId; }</span>
+<span class="nc" id="L28">    public void setShipmentId(String shipmentId) { this.shipmentId = shipmentId; }</span>
+<span class="nc" id="L29">    public Order getOrder() { return order; }</span>
+<span class="nc" id="L30">    public void setOrder(Order order) { this.order = order; }</span>
+<span class="nc" id="L31">    public String getTrackingNumber() { return trackingNumber; }</span>
+<span class="nc" id="L32">    public void setTrackingNumber(String trackingNumber) { this.trackingNumber = trackingNumber; }</span>
+<span class="nc" id="L33">    public String getCarrier() { return carrier; }</span>
+<span class="nc" id="L34">    public void setCarrier(String carrier) { this.carrier = carrier; }</span>
+<span class="nc" id="L35">    public LocalDate getEstimatedDelivery() { return estimatedDelivery; }</span>
+<span class="nc" id="L36">    public void setEstimatedDelivery(LocalDate estimatedDelivery) { this.estimatedDelivery = estimatedDelivery; }</span>
+<span class="nc" id="L37">    public LocalDate getActualDelivery() { return actualDelivery; }</span>
+<span class="nc" id="L38">    public void setActualDelivery(LocalDate actualDelivery) { this.actualDelivery = actualDelivery; }</span>
+<span class="nc" id="L39">    public boolean isDelivered() { return isDelivered; }</span>
+<span class="nc" id="L40">    public void setDelivered(boolean delivered) { isDelivered = delivered; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

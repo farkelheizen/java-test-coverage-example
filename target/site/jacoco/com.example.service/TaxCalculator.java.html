@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaxCalculator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">TaxCalculator.java</span></div><h1>TaxCalculator.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.enums.ProductCategory;
+import com.example.model.Product;
+
+<span class="nc" id="L6">public class TaxCalculator {</span>
+
+    public double calculateTax(double amount, String state) {
+<span class="nc bnc" id="L9" title="All 5 branches missed.">        double rate = switch (state.toUpperCase()) {</span>
+<span class="nc" id="L10">            case &quot;CA&quot; -&gt; 0.0725;</span>
+<span class="nc" id="L11">            case &quot;NY&quot; -&gt; 0.08;</span>
+<span class="nc" id="L12">            case &quot;TX&quot; -&gt; 0.0625;</span>
+<span class="nc" id="L13">            case &quot;FL&quot; -&gt; 0.06;</span>
+<span class="nc" id="L14">            default -&gt; 0.05;</span>
+        };
+<span class="nc" id="L16">        return amount * rate;</span>
+    }
+
+    public double calculateVAT(double amount, String country) {
+<span class="nc bnc" id="L20" title="All 5 branches missed.">        double rate = switch (country.toUpperCase()) {</span>
+<span class="nc" id="L21">            case &quot;UK&quot;, &quot;GB&quot; -&gt; 0.20;</span>
+<span class="nc" id="L22">            case &quot;DE&quot; -&gt; 0.19;</span>
+<span class="nc" id="L23">            case &quot;FR&quot; -&gt; 0.20;</span>
+<span class="nc" id="L24">            case &quot;US&quot; -&gt; 0.0;</span>
+<span class="nc" id="L25">            default -&gt; 0.15;</span>
+        };
+<span class="nc" id="L27">        return amount * rate;</span>
+    }
+
+    public boolean isTaxExempt(Product product) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        return product.getCategory() == ProductCategory.FOOD;</span>
+    }
+
+    public double calculateTotalWithTax(double subtotal, String state, String country) {
+<span class="nc" id="L35">        double stateTax = calculateTax(subtotal, state);</span>
+<span class="nc" id="L36">        double vat = calculateVAT(subtotal, country);</span>
+<span class="nc" id="L37">        return subtotal + stateTax + vat;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DecisionTree.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">DecisionTree.java</span></div><h1>DecisionTree.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import java.util.Map;
+
+<span class="nc" id="L5">public class DecisionTree {</span>
+
+    public String classify(Map&lt;String, Object&gt; features) {
+<span class="nc" id="L8">        Object age = features.get(&quot;age&quot;);</span>
+<span class="nc" id="L9">        Object income = features.get(&quot;income&quot;);</span>
+<span class="nc" id="L10">        Object hasLoan = features.get(&quot;hasLoan&quot;);</span>
+
+<span class="nc bnc" id="L12" title="All 4 branches missed.">        if (age instanceof Integer a &amp;&amp; a &lt; 25) {</span>
+<span class="nc bnc" id="L13" title="All 4 branches missed.">            if (income instanceof Double inc &amp;&amp; inc &gt; 50000) {</span>
+<span class="nc" id="L14">                return &quot;YOUNG_EARNER&quot;;</span>
+            }
+<span class="nc" id="L16">            return &quot;YOUNG_LIMITED&quot;;</span>
+<span class="nc bnc" id="L17" title="All 4 branches missed.">        } else if (age instanceof Integer a &amp;&amp; a &lt; 45) {</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">            if (Boolean.TRUE.equals(hasLoan)) {</span>
+<span class="nc" id="L19">                return &quot;MID_LEVERAGED&quot;;</span>
+            }
+<span class="nc" id="L21">            return &quot;MID_STABLE&quot;;</span>
+        } else {
+<span class="nc bnc" id="L23" title="All 4 branches missed.">            if (income instanceof Double inc &amp;&amp; inc &gt; 100000) {</span>
+<span class="nc" id="L24">                return &quot;SENIOR_WEALTHY&quot;;</span>
+            }
+<span class="nc" id="L26">            return &quot;SENIOR_MODERATE&quot;;</span>
+        }
+    }
+
+    public boolean evaluate(String nodeName, Object value) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (value instanceof Number n) {</span>
+<span class="nc bnc" id="L32" title="All 4 branches missed.">            return switch (nodeName) {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">                case &quot;HIGH_INCOME&quot; -&gt; n.doubleValue() &gt; 100000;</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">                case &quot;LOW_INCOME&quot; -&gt; n.doubleValue() &lt; 30000;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">                case &quot;ADULT&quot; -&gt; n.doubleValue() &gt;= 18;</span>
+<span class="nc" id="L36">                default -&gt; false;</span>
+            };
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        } else if (value instanceof String s) {</span>
+<span class="nc bnc" id="L39" title="All 3 branches missed.">            return switch (nodeName) {</span>
+<span class="nc" id="L40">                case &quot;PREMIUM_CUSTOMER&quot; -&gt; &quot;PREMIUM&quot;.equalsIgnoreCase(s);</span>
+<span class="nc" id="L41">                case &quot;VERIFIED&quot; -&gt; &quot;VERIFIED&quot;.equalsIgnoreCase(s);</span>
+<span class="nc" id="L42">                default -&gt; false;</span>
+            };
+        }
+<span class="nc" id="L45">        return false;</span>
+    }
+
+    public String getRecommendation(Map&lt;String, Object&gt; customerData) {
+<span class="nc" id="L49">        String category = classify(customerData);</span>
+<span class="nc bnc" id="L50" title="All 6 branches missed.">        return switch (category) {</span>
+<span class="nc" id="L51">            case &quot;YOUNG_EARNER&quot; -&gt; &quot;PREMIUM_SAVINGS&quot;;</span>
+<span class="nc" id="L52">            case &quot;YOUNG_LIMITED&quot; -&gt; &quot;STARTER_ACCOUNT&quot;;</span>
+<span class="nc" id="L53">            case &quot;MID_LEVERAGED&quot; -&gt; &quot;DEBT_MANAGEMENT&quot;;</span>
+<span class="nc" id="L54">            case &quot;MID_STABLE&quot; -&gt; &quot;INVESTMENT_PORTFOLIO&quot;;</span>
+<span class="nc" id="L55">            case &quot;SENIOR_WEALTHY&quot; -&gt; &quot;WEALTH_MANAGEMENT&quot;;</span>
+<span class="nc" id="L56">            default -&gt; &quot;STANDARD_ACCOUNT&quot;;</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

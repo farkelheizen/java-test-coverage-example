@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">CustomerService.java</span></div><h1>CustomerService.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.model.Customer;
+
+<span class="nc" id="L5">public class CustomerService {</span>
+
+    public Customer registerCustomer(Customer customer) {
+<span class="nc bnc" id="L8" title="All 4 branches missed.">        if (customer.getFirstName() == null || customer.getFirstName().isEmpty()) {</span>
+<span class="nc" id="L9">            throw new IllegalArgumentException(&quot;First name cannot be null or empty&quot;);</span>
+        }
+<span class="nc bnc" id="L11" title="All 4 branches missed.">        if (customer.getLastName() == null || customer.getLastName().isEmpty()) {</span>
+<span class="nc" id="L12">            throw new IllegalArgumentException(&quot;Last name cannot be null or empty&quot;);</span>
+        }
+<span class="nc bnc" id="L14" title="All 2 branches missed.">        if (customer.getEmail() == null) {</span>
+<span class="nc" id="L15">            throw new IllegalArgumentException(&quot;Email cannot be null&quot;);</span>
+        }
+<span class="nc" id="L17">        return customer;</span>
+    }
+
+    public Customer upgradeToPremium(Customer customer, int loyaltyPoints) {
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (loyaltyPoints &gt;= 1000) {</span>
+<span class="nc" id="L22">            customer.setPremium(true);</span>
+        } else {
+<span class="nc" id="L24">            throw new IllegalArgumentException(&quot;Insufficient loyalty points for premium upgrade. Required: 1000, have: &quot; + loyaltyPoints);</span>
+        }
+<span class="nc" id="L26">        return customer;</span>
+    }
+
+    public String getLoyaltyTier(Customer customer) {
+<span class="nc" id="L30">        int points = customer.getLoyaltyPoints();</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (points &gt;= 5000) {</span>
+<span class="nc" id="L32">            return &quot;GOLD&quot;;</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        } else if (points &gt;= 2000) {</span>
+<span class="nc" id="L34">            return &quot;SILVER&quot;;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        } else if (points &gt;= 500) {</span>
+<span class="nc" id="L36">            return &quot;BRONZE&quot;;</span>
+        } else {
+<span class="nc" id="L38">            return &quot;STANDARD&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

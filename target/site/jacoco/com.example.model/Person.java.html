@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Person.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.model</a> &gt; <span class="el_source">Person.java</span></div><h1>Person.java</h1><pre class="source lang-java linenums">package com.example.model;
+
+import java.time.LocalDate;
+
+public class Person {
+    private long id;
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
+    private Email email;
+    private PhoneNumber phone;
+    private Address address;
+
+<span class="nc" id="L14">    public Person() {}</span>
+
+    public Person(long id, String firstName, String lastName, LocalDate dateOfBirth,
+<span class="nc" id="L17">                  Email email, PhoneNumber phone, Address address) {</span>
+<span class="nc" id="L18">        this.id = id;</span>
+<span class="nc" id="L19">        this.firstName = firstName;</span>
+<span class="nc" id="L20">        this.lastName = lastName;</span>
+<span class="nc" id="L21">        this.dateOfBirth = dateOfBirth;</span>
+<span class="nc" id="L22">        this.email = email;</span>
+<span class="nc" id="L23">        this.phone = phone;</span>
+<span class="nc" id="L24">        this.address = address;</span>
+<span class="nc" id="L25">    }</span>
+
+    public String getFullName() {
+<span class="nc" id="L28">        return firstName + &quot; &quot; + lastName;</span>
+    }
+
+<span class="nc" id="L31">    public long getId() { return id; }</span>
+<span class="nc" id="L32">    public void setId(long id) { this.id = id; }</span>
+<span class="nc" id="L33">    public String getFirstName() { return firstName; }</span>
+<span class="nc" id="L34">    public void setFirstName(String firstName) { this.firstName = firstName; }</span>
+<span class="nc" id="L35">    public String getLastName() { return lastName; }</span>
+<span class="nc" id="L36">    public void setLastName(String lastName) { this.lastName = lastName; }</span>
+<span class="nc" id="L37">    public LocalDate getDateOfBirth() { return dateOfBirth; }</span>
+<span class="nc" id="L38">    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }</span>
+<span class="nc" id="L39">    public Email getEmail() { return email; }</span>
+<span class="nc" id="L40">    public void setEmail(Email email) { this.email = email; }</span>
+<span class="nc" id="L41">    public PhoneNumber getPhone() { return phone; }</span>
+<span class="nc" id="L42">    public void setPhone(PhoneNumber phone) { this.phone = phone; }</span>
+<span class="nc" id="L43">    public Address getAddress() { return address; }</span>
+<span class="nc" id="L44">    public void setAddress(Address address) { this.address = address; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

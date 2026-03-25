@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PricingEngine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">PricingEngine.java</span></div><h1>PricingEngine.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.model.Product;
+
+<span class="nc" id="L5">public class PricingEngine {</span>
+
+    public double calculateDynamicPrice(Product product, double demandFactor, double competitorPrice) {
+<span class="nc" id="L8">        double basePrice = product.getPrice();</span>
+<span class="nc" id="L9">        double demandAdjusted = basePrice * demandFactor;</span>
+<span class="nc bnc" id="L10" title="All 4 branches missed.">        if (competitorPrice &gt; 0 &amp;&amp; demandAdjusted &gt; competitorPrice * 1.1) {</span>
+<span class="nc" id="L11">            demandAdjusted = competitorPrice * 1.05;</span>
+        }
+<span class="nc" id="L13">        return Math.max(basePrice * 0.5, demandAdjusted);</span>
+    }
+
+    public double applySeasonalAdjustment(double basePrice, int month) {
+<span class="nc bnc" id="L17" title="All 4 branches missed.">        return switch (month) {</span>
+<span class="nc" id="L18">            case 12, 1, 2 -&gt; basePrice * 1.15; // Winter / holiday season</span>
+<span class="nc" id="L19">            case 6, 7, 8 -&gt; basePrice * 1.10; // Summer</span>
+<span class="nc" id="L20">            case 11 -&gt; basePrice * 1.20;       // Black Friday month</span>
+<span class="nc" id="L21">            default -&gt; basePrice;</span>
+        };
+    }
+
+    public double calculateMargin(double sellingPrice, double costPrice) {
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (sellingPrice &lt;= 0) return 0.0;</span>
+<span class="nc" id="L27">        return ((sellingPrice - costPrice) / sellingPrice) * 100.0;</span>
+    }
+
+    public double suggestOptimalPrice(double costPrice, double targetMargin, double competitorPrice) {
+<span class="nc" id="L31">        double priceForMargin = costPrice / (1 - targetMargin / 100.0);</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (competitorPrice &gt; 0) {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (priceForMargin &gt; competitorPrice * 1.15) {</span>
+<span class="nc" id="L34">                return competitorPrice * 1.05;</span>
+            }
+        }
+<span class="nc" id="L37">        return priceForMargin;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

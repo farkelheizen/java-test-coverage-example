@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CurrencyUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.util</a> &gt; <span class="el_source">CurrencyUtils.java</span></div><h1>CurrencyUtils.java</h1><pre class="source lang-java linenums">package com.example.util;
+
+import java.util.Map;
+import java.util.Set;
+
+<span class="nc" id="L6">public class CurrencyUtils {</span>
+
+<span class="nc" id="L8">    private static final Map&lt;String, Double&gt; RATES_TO_USD = Map.of(</span>
+<span class="nc" id="L9">            &quot;USD&quot;, 1.0,</span>
+<span class="nc" id="L10">            &quot;EUR&quot;, 1.08,</span>
+<span class="nc" id="L11">            &quot;GBP&quot;, 1.27,</span>
+<span class="nc" id="L12">            &quot;JPY&quot;, 0.0067</span>
+    );
+
+<span class="nc" id="L15">    private static final Map&lt;String, String&gt; SYMBOLS = Map.of(</span>
+            &quot;USD&quot;, &quot;$&quot;, &quot;EUR&quot;, &quot;€&quot;, &quot;GBP&quot;, &quot;£&quot;, &quot;JPY&quot;, &quot;¥&quot;
+    );
+
+<span class="nc" id="L19">    private static final Set&lt;String&gt; VALID_CODES = Set.of(&quot;USD&quot;, &quot;EUR&quot;, &quot;GBP&quot;, &quot;JPY&quot;, &quot;CAD&quot;, &quot;AUD&quot;, &quot;CHF&quot;);</span>
+
+    public static double convertCurrency(double amount, String fromCurrency, String toCurrency) {
+<span class="nc" id="L22">        Double fromRate = RATES_TO_USD.getOrDefault(fromCurrency.toUpperCase(), 1.0);</span>
+<span class="nc" id="L23">        Double toRate = RATES_TO_USD.getOrDefault(toCurrency.toUpperCase(), 1.0);</span>
+<span class="nc" id="L24">        double amountInUsd = amount * fromRate;</span>
+<span class="nc" id="L25">        return amountInUsd / toRate;</span>
+    }
+
+    public static String formatWithSymbol(double amount, String currency) {
+<span class="nc" id="L29">        String symbol = SYMBOLS.getOrDefault(currency.toUpperCase(), currency + &quot; &quot;);</span>
+<span class="nc" id="L30">        return symbol + String.format(&quot;%.2f&quot;, amount);</span>
+    }
+
+    public static boolean isValidCurrencyCode(String code) {
+<span class="nc bnc" id="L34" title="All 4 branches missed.">        return code != null &amp;&amp; VALID_CODES.contains(code.toUpperCase());</span>
+    }
+
+    public static int getRoundingPrecision(String currency) {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (&quot;JPY&quot;.equalsIgnoreCase(currency)) return 0;</span>
+<span class="nc" id="L39">        return 2;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BankAccount.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.model</a> &gt; <span class="el_source">BankAccount.java</span></div><h1>BankAccount.java</h1><pre class="source lang-java linenums">package com.example.model;
+
+public class BankAccount {
+    private String accountId;
+    private String accountNumber;
+    private String bankName;
+    private String routingNumber;
+    private String accountHolderName;
+    private double balance;
+
+<span class="nc" id="L11">    public BankAccount() {}</span>
+
+    public BankAccount(String accountId, String accountNumber, String bankName,
+<span class="nc" id="L14">                       String routingNumber, String accountHolderName, double balance) {</span>
+<span class="nc" id="L15">        this.accountId = accountId;</span>
+<span class="nc" id="L16">        this.accountNumber = accountNumber;</span>
+<span class="nc" id="L17">        this.bankName = bankName;</span>
+<span class="nc" id="L18">        this.routingNumber = routingNumber;</span>
+<span class="nc" id="L19">        this.accountHolderName = accountHolderName;</span>
+<span class="nc" id="L20">        this.balance = balance;</span>
+<span class="nc" id="L21">    }</span>
+
+<span class="nc" id="L23">    public String getAccountId() { return accountId; }</span>
+<span class="nc" id="L24">    public void setAccountId(String accountId) { this.accountId = accountId; }</span>
+<span class="nc" id="L25">    public String getAccountNumber() { return accountNumber; }</span>
+<span class="nc" id="L26">    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }</span>
+<span class="nc" id="L27">    public String getBankName() { return bankName; }</span>
+<span class="nc" id="L28">    public void setBankName(String bankName) { this.bankName = bankName; }</span>
+<span class="nc" id="L29">    public String getRoutingNumber() { return routingNumber; }</span>
+<span class="nc" id="L30">    public void setRoutingNumber(String routingNumber) { this.routingNumber = routingNumber; }</span>
+<span class="nc" id="L31">    public String getAccountHolderName() { return accountHolderName; }</span>
+<span class="nc" id="L32">    public void setAccountHolderName(String accountHolderName) { this.accountHolderName = accountHolderName; }</span>
+<span class="nc" id="L33">    public double getBalance() { return balance; }</span>
+<span class="nc" id="L34">    public void setBalance(double balance) { this.balance = balance; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

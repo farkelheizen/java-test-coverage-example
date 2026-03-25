@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">SearchService.java</span></div><h1>SearchService.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.enums.ProductCategory;
+import com.example.model.Product;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+<span class="nc" id="L9">public class SearchService {</span>
+
+    public List&lt;Product&gt; searchProducts(List&lt;Product&gt; products, String query,
+                                         ProductCategory category, Double maxPrice) {
+<span class="nc" id="L13">        return products.stream()</span>
+<span class="nc" id="L14">                .filter(p -&gt; {</span>
+<span class="nc bnc" id="L15" title="All 4 branches missed.">                    if (query != null &amp;&amp; !query.isEmpty()) {</span>
+<span class="nc bnc" id="L16" title="All 2 branches missed.">                        if (!p.getName().toLowerCase().contains(query.toLowerCase())</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">                                &amp;&amp; !p.getDescription().toLowerCase().contains(query.toLowerCase())) {</span>
+<span class="nc" id="L18">                            return false;</span>
+                        }
+                    }
+<span class="nc bnc" id="L21" title="All 4 branches missed.">                    if (category != null &amp;&amp; p.getCategory() != category) return false;</span>
+<span class="nc bnc" id="L22" title="All 4 branches missed.">                    if (maxPrice != null &amp;&amp; p.getPrice() &gt; maxPrice) return false;</span>
+<span class="nc" id="L23">                    return true;</span>
+                })
+<span class="nc" id="L25">                .collect(Collectors.toList());</span>
+    }
+
+    public List&lt;Product&gt; sortResults(List&lt;Product&gt; products, String sortBy, boolean ascending) {
+<span class="nc bnc" id="L29" title="All 3 branches missed.">        Comparator&lt;Product&gt; comparator = switch (sortBy.toLowerCase()) {</span>
+<span class="nc" id="L30">            case &quot;price&quot; -&gt; Comparator.comparingDouble(Product::getPrice);</span>
+<span class="nc" id="L31">            case &quot;name&quot; -&gt; Comparator.comparing(Product::getName);</span>
+<span class="nc" id="L32">            default -&gt; Comparator.comparing(Product::getProductId);</span>
+        };
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (!ascending) comparator = comparator.reversed();</span>
+<span class="nc" id="L35">        return products.stream().sorted(comparator).collect(Collectors.toList());</span>
+    }
+
+    public List&lt;Product&gt; filterByPriceRange(List&lt;Product&gt; products, double min, double max) {
+<span class="nc" id="L39">        return products.stream()</span>
+<span class="nc bnc" id="L40" title="All 4 branches missed.">                .filter(p -&gt; p.getPrice() &gt;= min &amp;&amp; p.getPrice() &lt;= max)</span>
+<span class="nc" id="L41">                .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

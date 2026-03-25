@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateTimeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">DateTimeService.java</span></div><h1>DateTimeService.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Set;
+
+<span class="nc" id="L8">public class DateTimeService {</span>
+
+<span class="nc" id="L10">    private static final Set&lt;LocalDate&gt; HOLIDAYS = Set.of(</span>
+<span class="nc" id="L11">            LocalDate.of(LocalDate.now().getYear(), 1, 1),</span>
+<span class="nc" id="L12">            LocalDate.of(LocalDate.now().getYear(), 7, 4),</span>
+<span class="nc" id="L13">            LocalDate.of(LocalDate.now().getYear(), 12, 25)</span>
+    );
+
+    public boolean isWeekend(LocalDate date) {
+<span class="nc" id="L17">        DayOfWeek day = date.getDayOfWeek();</span>
+<span class="nc bnc" id="L18" title="All 4 branches missed.">        return day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY;</span>
+    }
+
+    public boolean isBusinessDay(LocalDate date) {
+<span class="nc bnc" id="L22" title="All 4 branches missed.">        return !isWeekend(date) &amp;&amp; !HOLIDAYS.contains(date);</span>
+    }
+
+    public LocalDate addBusinessDays(LocalDate date, int days) {
+<span class="nc" id="L26">        LocalDate result = date;</span>
+<span class="nc" id="L27">        int added = 0;</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        while (added &lt; days) {</span>
+<span class="nc" id="L29">            result = result.plusDays(1);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            if (isBusinessDay(result)) added++;</span>
+        }
+<span class="nc" id="L32">        return result;</span>
+    }
+
+    public int calculateAge(LocalDate birthDate) {
+<span class="nc" id="L36">        return Period.between(birthDate, LocalDate.now()).getYears();</span>
+    }
+
+    public String formatDuration(long seconds) {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (seconds &lt; 60) return seconds + &quot; seconds&quot;;</span>
+<span class="nc" id="L41">        long minutes = seconds / 60;</span>
+<span class="nc" id="L42">        long remainingSeconds = seconds % 60;</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (minutes &lt; 60) {</span>
+<span class="nc" id="L44">            return minutes + &quot; minutes &quot; + remainingSeconds + &quot; seconds&quot;;</span>
+        }
+<span class="nc" id="L46">        long hours = minutes / 60;</span>
+<span class="nc" id="L47">        long remainingMinutes = minutes % 60;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (hours &lt; 24) {</span>
+<span class="nc" id="L49">            return hours + &quot; hours &quot; + remainingMinutes + &quot; minutes&quot;;</span>
+        }
+<span class="nc" id="L51">        long days = hours / 24;</span>
+<span class="nc" id="L52">        long remainingHours = hours % 24;</span>
+<span class="nc" id="L53">        return days + &quot; days &quot; + remainingHours + &quot; hours&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.util</a> &gt; <span class="el_source">DateUtils.java</span></div><h1>DateUtils.java</h1><pre class="source lang-java linenums">package com.example.util;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+
+<span class="nc" id="L8">public class DateUtils {</span>
+
+    public static String formatDate(LocalDate date, String pattern) {
+<span class="nc" id="L11">        return date.format(DateTimeFormatter.ofPattern(pattern));</span>
+    }
+
+    public static LocalDate parseDate(String dateStr, String pattern) {
+<span class="nc" id="L15">        return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(pattern));</span>
+    }
+
+    public static long daysBetween(LocalDate from, LocalDate to) {
+<span class="nc" id="L19">        return ChronoUnit.DAYS.between(from, to);</span>
+    }
+
+    public static boolean isLeapYear(int year) {
+<span class="nc bnc" id="L23" title="All 6 branches missed.">        return (year % 4 == 0 &amp;&amp; year % 100 != 0) || (year % 400 == 0);</span>
+    }
+
+    public static int getQuarter(LocalDate date) {
+<span class="nc" id="L27">        return (date.getMonthValue() - 1) / 3 + 1;</span>
+    }
+
+    public static LocalDate startOfMonth(LocalDate date) {
+<span class="nc" id="L31">        return date.with(TemporalAdjusters.firstDayOfMonth());</span>
+    }
+
+    public static LocalDate endOfMonth(LocalDate date) {
+<span class="nc" id="L35">        return date.with(TemporalAdjusters.lastDayOfMonth());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

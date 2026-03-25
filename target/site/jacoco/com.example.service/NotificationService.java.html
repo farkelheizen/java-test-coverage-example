@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">NotificationService.java</span></div><h1>NotificationService.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.model.Notification;
+import java.util.List;
+import java.util.stream.Collectors;
+
+<span class="nc" id="L7">public class NotificationService {</span>
+
+    public void sendNotification(Notification notification) {
+<span class="nc" id="L10">        String channel = notification.getChannel();</span>
+<span class="nc bnc" id="L11" title="All 2 branches missed.">        if (&quot;EMAIL&quot;.equalsIgnoreCase(channel)) {</span>
+<span class="nc" id="L12">            sendViaEmail(notification);</span>
+<span class="nc bnc" id="L13" title="All 2 branches missed.">        } else if (&quot;SMS&quot;.equalsIgnoreCase(channel)) {</span>
+<span class="nc" id="L14">            sendViaSms(notification);</span>
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        } else if (&quot;PUSH&quot;.equalsIgnoreCase(channel)) {</span>
+<span class="nc" id="L16">            sendViaPush(notification);</span>
+        } else {
+<span class="nc" id="L18">            throw new IllegalArgumentException(&quot;Unknown channel: &quot; + channel);</span>
+        }
+<span class="nc" id="L20">    }</span>
+
+    private void sendViaEmail(Notification notification) {
+        // Email delivery logic
+<span class="nc" id="L24">    }</span>
+
+    private void sendViaSms(Notification notification) {
+        // SMS delivery logic
+<span class="nc" id="L28">    }</span>
+
+    private void sendViaPush(Notification notification) {
+        // Push delivery logic
+<span class="nc" id="L32">    }</span>
+
+    public void markAsRead(Notification notification) {
+<span class="nc" id="L35">        notification.setRead(true);</span>
+<span class="nc" id="L36">    }</span>
+
+    public List&lt;Notification&gt; filterUnread(List&lt;Notification&gt; notifications) {
+<span class="nc" id="L39">        return notifications.stream()</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">                .filter(n -&gt; !n.isRead())</span>
+<span class="nc" id="L41">                .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

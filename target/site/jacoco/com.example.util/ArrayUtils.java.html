@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArrayUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.util</a> &gt; <span class="el_source">ArrayUtils.java</span></div><h1>ArrayUtils.java</h1><pre class="source lang-java linenums">package com.example.util;
+
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
+<span class="nc" id="L6">public class ArrayUtils {</span>
+
+    public static boolean contains(int[] arr, int value) {
+<span class="nc bnc" id="L9" title="All 4 branches missed.">        for (int v : arr) if (v == value) return true;</span>
+<span class="nc" id="L10">        return false;</span>
+    }
+
+    public static int sum(int[] arr) {
+<span class="nc" id="L14">        int total = 0;</span>
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        for (int v : arr) total += v;</span>
+<span class="nc" id="L16">        return total;</span>
+    }
+
+    public static double average(int[] arr) {
+<span class="nc bnc" id="L20" title="All 4 branches missed.">        if (arr == null || arr.length == 0) return 0.0;</span>
+<span class="nc" id="L21">        return (double) sum(arr) / arr.length;</span>
+    }
+
+    public static int[] reverse(int[] arr) {
+<span class="nc" id="L25">        int[] result = Arrays.copyOf(arr, arr.length);</span>
+<span class="nc" id="L26">        int left = 0, right = result.length - 1;</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        while (left &lt; right) {</span>
+<span class="nc" id="L28">            int tmp = result[left];</span>
+<span class="nc" id="L29">            result[left] = result[right];</span>
+<span class="nc" id="L30">            result[right] = tmp;</span>
+<span class="nc" id="L31">            left++;</span>
+<span class="nc" id="L32">            right--;</span>
+<span class="nc" id="L33">        }</span>
+<span class="nc" id="L34">        return result;</span>
+    }
+
+    public static int[] sort(int[] arr) {
+<span class="nc" id="L38">        int[] result = Arrays.copyOf(arr, arr.length);</span>
+<span class="nc" id="L39">        Arrays.sort(result);</span>
+<span class="nc" id="L40">        return result;</span>
+    }
+
+    public static int[] mergeArrays(int[] a, int[] b) {
+<span class="nc" id="L44">        int[] result = new int[a.length + b.length];</span>
+<span class="nc" id="L45">        System.arraycopy(a, 0, result, 0, a.length);</span>
+<span class="nc" id="L46">        System.arraycopy(b, 0, result, a.length, b.length);</span>
+<span class="nc" id="L47">        return result;</span>
+    }
+
+    public static int[] removeDuplicates(int[] arr) {
+<span class="nc" id="L51">        LinkedHashSet&lt;Integer&gt; set = new LinkedHashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int v : arr) set.add(v);</span>
+<span class="nc" id="L53">        return set.stream().mapToInt(Integer::intValue).toArray();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

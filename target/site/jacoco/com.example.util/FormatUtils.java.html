@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FormatUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.util</a> &gt; <span class="el_source">FormatUtils.java</span></div><h1>FormatUtils.java</h1><pre class="source lang-java linenums">package com.example.util;
+
+<span class="nc" id="L3">public class FormatUtils {</span>
+
+    public static String formatCurrency(double amount, String currencyCode) {
+<span class="nc bnc" id="L6" title="All 5 branches missed.">        String symbol = switch (currencyCode.toUpperCase()) {</span>
+<span class="nc" id="L7">            case &quot;USD&quot; -&gt; &quot;$&quot;;</span>
+<span class="nc" id="L8">            case &quot;EUR&quot; -&gt; &quot;€&quot;;</span>
+<span class="nc" id="L9">            case &quot;GBP&quot; -&gt; &quot;£&quot;;</span>
+<span class="nc" id="L10">            case &quot;JPY&quot; -&gt; &quot;¥&quot;;</span>
+<span class="nc" id="L11">            default -&gt; currencyCode + &quot; &quot;;</span>
+        };
+<span class="nc" id="L13">        return symbol + String.format(&quot;%.2f&quot;, amount);</span>
+    }
+
+    public static String formatPercentage(double value, int decimals) {
+<span class="nc" id="L17">        return String.format(&quot;%.&quot; + decimals + &quot;f%%&quot;, value);</span>
+    }
+
+    public static String formatPhoneNumber(String digits) {
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (digits == null) return null;</span>
+<span class="nc" id="L22">        String cleaned = digits.replaceAll(&quot;[^0-9]&quot;, &quot;&quot;);</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if (cleaned.length() == 10) {</span>
+<span class="nc" id="L24">            return String.format(&quot;(%s) %s-%s&quot;,</span>
+<span class="nc" id="L25">                    cleaned.substring(0, 3),</span>
+<span class="nc" id="L26">                    cleaned.substring(3, 6),</span>
+<span class="nc" id="L27">                    cleaned.substring(6));</span>
+        }
+<span class="nc" id="L29">        return digits;</span>
+    }
+
+    public static String formatCreditCard(String number) {
+<span class="nc bnc" id="L33" title="All 4 branches missed.">        if (number == null || number.length() &lt; 4) return number;</span>
+<span class="nc" id="L34">        String last4 = number.substring(number.length() - 4);</span>
+<span class="nc" id="L35">        return &quot;*&quot;.repeat(number.length() - 4) + last4;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

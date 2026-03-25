@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShippingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-test-coverage-example</a> &gt; <a href="index.source.html" class="el_package">com.example.service</a> &gt; <span class="el_source">ShippingService.java</span></div><h1>ShippingService.java</h1><pre class="source lang-java linenums">package com.example.service;
+
+import com.example.model.Order;
+import com.example.model.Shipment;
+import java.time.LocalDate;
+
+<span class="nc" id="L7">public class ShippingService {</span>
+
+    public double calculateShippingRate(double weight, String destination, boolean isExpress) {
+        double baseRate;
+<span class="nc bnc" id="L11" title="All 2 branches missed.">        if (weight &lt;= 1.0) {</span>
+<span class="nc" id="L12">            baseRate = 5.99;</span>
+<span class="nc bnc" id="L13" title="All 2 branches missed.">        } else if (weight &lt;= 5.0) {</span>
+<span class="nc" id="L14">            baseRate = 9.99;</span>
+<span class="nc bnc" id="L15" title="All 2 branches missed.">        } else if (weight &lt;= 20.0) {</span>
+<span class="nc" id="L16">            baseRate = 19.99;</span>
+        } else {
+<span class="nc" id="L18">            baseRate = 39.99;</span>
+        }
+
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (&quot;INTERNATIONAL&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L22">            baseRate *= 3.0;</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        } else if (&quot;REMOTE&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L24">            baseRate *= 1.5;</span>
+        }
+
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (isExpress) {</span>
+<span class="nc" id="L28">            baseRate *= 2.0;</span>
+        }
+<span class="nc" id="L30">        return baseRate;</span>
+    }
+
+    public Shipment createShipment(Order order, String carrier) {
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (order == null) {</span>
+<span class="nc" id="L35">            throw new IllegalArgumentException(&quot;Order cannot be null&quot;);</span>
+        }
+<span class="nc bnc" id="L37" title="All 4 branches missed.">        if (carrier == null || carrier.isEmpty()) {</span>
+<span class="nc" id="L38">            throw new IllegalArgumentException(&quot;Carrier cannot be null or empty&quot;);</span>
+        }
+<span class="nc" id="L40">        Shipment shipment = new Shipment();</span>
+<span class="nc" id="L41">        shipment.setOrder(order);</span>
+<span class="nc" id="L42">        shipment.setCarrier(carrier);</span>
+<span class="nc" id="L43">        shipment.setTrackingNumber(&quot;TRK&quot; + System.currentTimeMillis());</span>
+<span class="nc" id="L44">        shipment.setEstimatedDelivery(LocalDate.now().plusDays(5));</span>
+<span class="nc" id="L45">        shipment.setDelivered(false);</span>
+<span class="nc" id="L46">        return shipment;</span>
+    }
+
+    public int estimateDeliveryDays(String destination, boolean isExpress) {
+        int days;
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (&quot;LOCAL&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L52">            days = 1;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        } else if (&quot;DOMESTIC&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L54">            days = 3;</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        } else if (&quot;REGIONAL&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L56">            days = 5;</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        } else if (&quot;INTERNATIONAL&quot;.equalsIgnoreCase(destination)) {</span>
+<span class="nc" id="L58">            days = 14;</span>
+        } else {
+<span class="nc" id="L60">            days = 7;</span>
+        }
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        return isExpress ? Math.max(1, days / 2) : days;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
