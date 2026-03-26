@@ -1,6 +1,6 @@
 # java-test-coverage-example
 
-A Java 21 Maven project designed for testing autonomous agentic test-coverage creation.
+A Java 17 Maven project designed for testing autonomous agentic test-coverage creation.
 
 ## Overview
 
@@ -38,7 +38,7 @@ src/main/java/com/example/
 
 ## Tech Stack
 
-- **Java 21**
+- **Java 17**
 - **JUnit 5** (junit-jupiter 5.10.2) — test framework
 - **Mockito** (mockito-junit-jupiter 5.11.0) — mocking framework
 - **JaCoCo** (0.8.11) — code coverage reports

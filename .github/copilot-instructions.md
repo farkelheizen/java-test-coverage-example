@@ -1,7 +1,7 @@
 # Copilot Instructions for java-test-coverage-example
 
 ## Project Context
-- This is a Java 21 Maven project focused on generating and improving automated test coverage.
+- This is a Java 17 Maven project focused on generating and improving automated test coverage.
 - Production code is under `src/main/java/com/example`.
 - Tests are under `src/test/java/com/example`.
 - Build and test with Maven.
@@ -15,7 +15,7 @@
 ## Testing Requirements
 Whenever generating or modifying tests in this repository, you MUST adhere to the following rules:
 
-1. **Frameworks:** Use exactly Java 21, JUnit 5 (Jupiter), and Mockito 5.
+1. **Frameworks:** Use exactly Java 17, JUnit 5 (Jupiter), and Mockito 5.
 2. **No JUnit 4:** Never use `org.junit.Test`, `org.junit.Assert`, or `@RunWith`.
 3. **Annotations:**
    - Use `@org.junit.jupiter.api.Test`.
