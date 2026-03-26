@@ -12,7 +12,7 @@ Your only job is to add or repair deterministic unit tests for the specific clas
 
 ## Repository Rules
 - Follow `.github/copilot-instructions.md` exactly.
-- Use Java 21, JUnit 5, and Mockito 5 only.
+- Use Java 17, JUnit 5, and Mockito 5 only.
 - Never use JUnit 4 APIs or annotations.
 - Mirror the production package structure under `src/test/java`.
 - Mock external collaborators instead of constructing real service dependencies.
