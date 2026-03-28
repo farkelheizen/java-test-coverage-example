@@ -1,0 +1,16 @@
+[project]
+name = "brimley-swarm"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "farkelheizen",email = "billspratley@gmail.com"}
+]
+requires-python = "<4.0,>=3.10"
+dependencies = [
+    "brimley[fastmcp] (>=0.8.0,<0.9.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

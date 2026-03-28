@@ -1,0 +1,49 @@
+# brimley.yaml - Test Coverage Swarm
+
+# 1. Framework Settings (ctx.settings)
+brimley:
+  env: ${BRIMLEY_ENV:development}
+  app_name: "Test Coverage Swarm"
+  log_level: "INFO"
+
+# 2. Application Config (ctx.config) - Immutable user settings
+config:
+  project_root: "${SWARM_PROJECT_ROOT:..}"
+  jacoco_report: "target/site/jacoco/jacoco.xml"
+  test_source_root: "src/test/java"
+  main_source_root: "src/main/java"
+  support_email: "person@example.com"
+
+# 3. Initial Application State (ctx.app) - Mutable seed data
+state:
+  active_run_id: null
+
+# 4. Database Definitions (ctx.databases)
+databases:
+  default:
+    connector: sqlite
+    url: "sqlite:///./swarm.db"
+
+# 5. MCP server settings
+mcp:
+  embedded: true
+  host: 127.0.0.1
+  port: 8000
+
+auto_reload:
+  enabled: true
+
+# Logging Configuration
+logging:
+  level: TRACE                  # Global default level for the stderr sink
+  modules:                     # Module-level overrides (Log4J-style prefix matching)
+    brimley.execution: TRACE
+    fastmcp: WARNING
+    sqlalchemy: WARNING
+  file:
+    path: ./logs/brimley.log     # Relative to project root, or absolute
+    level: TRACE               # File sink can be more verbose than stderr
+    format: jsonl              # 'text' (default) or 'jsonl' for structured logs
+    rotation: 10 MB            # 'N MB', 'daily', etc.
+    retention: 7 days          # '7 days', '4 weeks', etc.
+  managed: true                # Set false to disable Brimley's Loguru setup entirely

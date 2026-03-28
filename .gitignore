@@ -33,3 +33,36 @@ target/
 .classpath
 .project
 .settings/
+
+# brimley
+brimley
+brimley/
+.brimley/
+logs/
+swarm.db
+swarm.db*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+ENV/
+env/
+.env/
+.venv/
+
+# Packaging
+dist/
+build/
+*.egg-info/
+pip-wheel-metadata/
+
+# Poetry local env and PEP 582
+__pypackages__/
+
+# Testing / cache
+.pytest_cache/
+.mypy_cache/

@@ -13,32 +13,43 @@ The current swarm (`coverage-coordinator` → `jacoco-coverage-analyst` → `jav
 
 **Goal:** Replace in-context bookkeeping with a local SQLite database managed by Brimley MCP tools. Separate seeding (run setup + JaCoCo import) from execution (test writing), so a single seed populates the work queue and any number of concurrent worker agents can pull from it throughout the day.
 
+This local-only design uses `brimley-*` agent names to distinguish it from the earlier cloud-oriented `coverage-*`, `jacoco-*`, and `java-test-writer` agents that remain in the repository for reference.
+
+See also:
+
+- [Implementation Plan](./brimley-code-coverage-swarm-implementation-plan.md)
+- [Launch Guide](./how-to-kick-off-the-autonomous-swarm.md)
+
 ---
 
 ## 2. Architecture Overview
 
-The system separates seeding from execution. A **seeder** agent runs once to populate the work queue, then any number of **worker** agents pull from it throughout the day.
+The system separates seeding from execution. A **seeder** agent runs once to populate the work queue, then any number of **worker** agents pull from it throughout the day. All agents talk to one shared Brimley daemon over MCP; only the daemon touches SQLite.
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
 │  VS Code Chat                                                     │
 │                                                                   │
 │  ┌─────────────────────┐       (run once, then done)              │
-│  │  coverage-seeder    │─────────────────────┐                    │
+│  │ brimley-coverage-   │─────────────────────┐                    │
+│  │ seeder              │                     │                    │
 │  └─────────────────────┘                     │                    │
 │                                              │ MCP calls          │
 │  ┌─────────────────────┐                     │                    │
-│  │  coverage-worker    │──────┐              │                    │
+│  │ brimley-coverage-   │──────┐              │                    │
+│  │ worker              │      │              │                    │
 │  │  (session A)        │      │              │                    │
 │  └─────────────────────┘      │              │                    │
 │                               │              │                    │
 │  ┌─────────────────────┐      │ MCP calls    │                    │
-│  │  coverage-worker    │──────┤              │                    │
+│  │ brimley-coverage-   │──────┤              │                    │
+│  │ worker              │      │              │                    │
 │  │  (session B)        │      │              │                    │
 │  └─────────────────────┘      │              │                    │
 │                               │              │                    │
 │  ┌─────────────────────┐      │              │                    │
-│  │  coverage-worker    │──────┤              │                    │
+│  │ brimley-coverage-   │──────┤              │                    │
+│  │ worker              │      │              │                    │
 │  │  (session C)        │      │              │                    │
 │  └─────────────────────┘      │              │                    │
 │                               │              │                    │
@@ -71,10 +82,11 @@ The system separates seeding from execution. A **seeder** agent runs once to pop
 
 **Key properties:**
 
-- The Brimley daemon runs locally (`brimley repl --root .` or `brimley mcp-serve --root .`).
-- VS Code agents connect to it as an MCP server (SSE at `http://127.0.0.1:8000/sse`).
-- All state is in `swarm.db` — durable across sessions, inspectable with any SQLite client.
-- Agents never write to the database directly; they only call MCP tools.
+- One Brimley daemon runs locally (`brimley repl --root .` or `brimley mcp-serve --root .`) for the active swarm.
+- All VS Code agents connect to that same daemon as an MCP server (SSE at `http://127.0.0.1:8000/sse`).
+- All state is in one shared `swarm.db` owned by the daemon — durable across sessions, inspectable with any SQLite client.
+- Agents never write to the database directly; they only call MCP tools exposed by Brimley.
+- Git worktrees isolate source edits and build artifacts, not coordination state.
 - **Seeder runs once** — creates a run, builds JaCoCo, imports the report, then exits.
 - **Workers are stateless** — each one queries for pending work, claims it, writes tests, and reports results. Launch as many as you want.
 
@@ -82,7 +94,7 @@ The system separates seeding from execution. A **seeder** agent runs once to pop
 
 ## 3. SQLite Database Schema
 
-Database file: `swarm.db` (configured in `brimley.yaml` under `databases.default`).
+Database file: `swarm.db` (configured in `brimley.yaml` under `databases.default` and accessed only through Brimley MCP tools).
 
 ### 3.1 `runs` — Top-Level Orchestration Runs
 
@@ -543,8 +555,10 @@ brimley-swarm/
 ├── release_class.sql              # SQL MCP tool: unclaim
 ├── get_run_summary.sql            # SQL MCP tool: dashboard
 ├── close_run.sql                  # SQL MCP tool: finalize
-└── swarm.db                       # SQLite database (created by init_db.py)
+└── swarm.db                       # Shared SQLite database owned by the Brimley daemon
 ```
+
+If workers operate from separate git worktrees, keep this database at a single shared path owned by the daemon. Do not start a separate per-worktree database unless you intentionally want isolated runs.
 
 ### `brimley.yaml`
 
@@ -565,7 +579,7 @@ state:
 databases:
   default:
     connector: sqlite
-    url: "sqlite:///./swarm.db"
+    url: "sqlite:///./swarm.db" # one shared DB for the daemon; use a stable path in worktree-based setups
 
 mcp:
   embedded: true
@@ -588,7 +602,7 @@ VS Code's MCP client configuration (in `.vscode/mcp.json` or user settings) regi
 // .vscode/mcp.json
 {
   "servers": {
-    "brimley-swarm": {
+    "brimley-coverage-swarm": {
       "type": "sse",
       "url": "http://127.0.0.1:8000/sse",
     },
@@ -596,11 +610,13 @@ VS Code's MCP client configuration (in `.vscode/mcp.json` or user settings) regi
 }
 ```
 
-Once registered, every VS Code agent can call the Brimley tools by name — they appear as MCP tools in the agent's tool list alongside the built-in VS Code tools.
+Once registered, every VS Code agent can call the Brimley tools by name through that same endpoint — they appear as MCP tools in the agent's tool list alongside the built-in VS Code tools. In this repository, that MCP server is named `brimley-coverage-swarm`. Workers may sit in different chat sessions or different git worktrees, but they still coordinate through the same Brimley server.
 
 ### 6.2 Agent Roles
 
-#### `coverage-seeder` (run once)
+The local Brimley agents live in `.github/agents/` under the `brimley-*` prefix. They are separate from the older cloud-oriented swarm agents.
+
+#### `brimley-coverage-seeder` (run once)
 
 The seeder is a short-lived agent that populates the work queue. Run it once at the start of a coverage push (e.g., top of the day):
 
@@ -620,15 +636,17 @@ The seeder is a short-lived agent that populates the work queue. Run it once at 
 
 The seeder **does not write tests**. It builds the backlog and exits. You can re-run the seeder later with a different `target_scope` or `class_limit` to create additional runs.
 
-#### `coverage-worker` (run many, concurrently)
+#### `brimley-coverage-worker` (run many, concurrently)
 
-Each worker is an autonomous agent that pulls work from the queue and writes tests. Launch as many as you want across separate chat sessions — the checkout mechanism prevents collisions.
+Each worker is an autonomous agent that pulls work from the queue and writes tests. Launch as many as you want across separate chat sessions — the checkout mechanism prevents queue collisions. For file-system isolation, run each worker in its own git worktree and, preferably, on its own branch.
 
 **Optional parameters:**
 - `run_id` — which run to pull from (defaults to the most recent open run)
 - `count` — how many classes to claim per cycle (default: 3)
 - `package_filter` — restrict to classes in a specific package (e.g., `com.example.service`)
 - `fqcn_list` — explicit list of fully qualified class names to target
+- `worktree_path` — optional dedicated git worktree for this worker
+- `branch_name` — optional unique branch name for that worktree
 
 ```
 1. Call `get_run_summary(run_id)` to see current state
@@ -657,9 +675,38 @@ Each worker is an autonomous agent that pulls work from the queue and writes tes
    → print summary and exit
 ```
 
-> **Design choice:** Workers are self-contained — they call Brimley tools directly, read source, write tests, and report results. No subagent delegation needed. This keeps each chat session simple and independently resumable.
+> **Design choice:** Workers are self-contained — they call Brimley tools directly, read source, write tests, and report results. No subagent delegation is required for the default flow, though `brimley-jacoco-coverage-analyst` remains available as an optional read-only helper. This keeps each chat session simple and independently resumable.
 
-#### `jacoco-coverage-analyst` (optional helper)
+#### `brimley-coverage-worker-isolated` (recommended for parallel editing)
+
+This variant uses the same shared Brimley daemon and queue, but performs source edits from a dedicated git worktree for the worker session.
+
+**Additional optional parameters:**
+- `worktree_path` — where to create or reuse the worker worktree
+- `branch_name` — unique branch for that worktree
+- `base_ref` — git ref to branch from, default `HEAD`
+- `reuse_worktree` — whether an existing worktree may be reused
+
+```
+1. Ensure the shared `brimley-coverage-swarm` MCP server is already running.
+
+2. Create or reuse a dedicated git worktree for the worker.
+  → optionally create a unique branch for that worktree
+
+3. If the current chat session cannot continue from the new worktree automatically:
+  → stop and print the exact `cd` command and exact rerun prompt
+
+4. From inside that worktree, follow the normal `brimley-coverage-worker` flow:
+  → `get_run_summary` → `list_uncovered_classes` → `checkout_classes`
+  → write tests → run Maven → `complete_class` or `fail_class`
+
+5. If post-test coverage should be imported back into the database:
+  → call `import_jacoco_report` with the report path from that worker's worktree
+```
+
+This keeps queue coordination centralized while isolating uncommitted file changes between workers.
+
+#### `brimley-jacoco-coverage-analyst` (optional helper)
 
 With coverage data in SQLite, explicit analysis is often unnecessary. However, the analyst remains useful when a worker wants:
 
@@ -669,10 +716,10 @@ With coverage data in SQLite, explicit analysis is often unnecessary. However, t
 
 ### 6.3 Parallel Worker Execution
 
-Multiple workers safely share a single run thanks to atomic checkout:
+Multiple workers safely share a single run thanks to atomic checkout at the shared Brimley daemon. When workers also use separate git worktrees, they avoid colliding in the working tree while still drawing from the same queue:
 
 ```
-                    coverage-seeder (morning)
+                    brimley-coverage-seeder (morning)
                     ─────────────────────────
                     create_run(scope="com.example", class_limit=50)
                     import_jacoco_report(run_id=1)
@@ -681,9 +728,11 @@ Multiple workers safely share a single run thanks to atomic checkout:
 
 Session A                          Session B                         Session C
 ─────────                          ─────────                         ─────────
-coverage-worker                    coverage-worker                   coverage-worker
+brimley-coverage-worker-isolated   brimley-coverage-worker-isolated  brimley-coverage-worker-isolated
   run_id=1, count=3                  run_id=1, count=5                 run_id=1,
   package=com.example.service        package=com.example.util          count=3
+  worktree=../cov-service-a         worktree=../cov-util-b            worktree=../cov-mixed-c
+  branch=worker/run-1-a             branch=worker/run-1-b             branch=worker/run-1-c
 
 list → [3,5,7]                     list → [12,14,16,18,20]           list → [22,24,26]
 checkout → claims 3,5,7            checkout → claims 12,14,16,18,20  checkout → claims 22,24,26
@@ -694,7 +743,7 @@ list → [9,11] (next batch)        list → [28,30,32,34] ...          list →
 "0 pending — done!"               "0 pending — done!"               "0 pending — done!"
 ```
 
-If two workers race for the same class, only one wins the checkout — the other gets an empty result and moves to the next available class. No coordination between sessions needed.
+If two workers race for the same class, only one wins the checkout — the other gets an empty result and moves to the next available class. No extra coordination between sessions is needed as long as they all talk to the same Brimley daemon.
 
 ### 6.4 Resumability
 
@@ -703,15 +752,15 @@ If a worker session ends mid-run:
 1. Open a new VS Code chat session.
 2. Call `get_run_summary(run_id)` to see where things stand.
 3. Any classes stuck in `checked_out` (stale) can be released: `release_class(class_id)`.
-4. Launch a new `coverage-worker` with the same `run_id` — it picks up where the previous session left off.
+4. Launch a new `brimley-coverage-worker` or `brimley-coverage-worker-isolated` with the same `run_id` — it picks up where the previous session left off.
 5. When all work is done, call `close_run(run_id)`.
 
 ### 6.5 Agent Definition Sketches
 
 ```yaml
 ---
-name: coverage-seeder
-description: "Seeds a coverage run: creates the run, builds JaCoCo, imports the report."
+name: brimley-coverage-seeder
+description: "Seeds a local Brimley coverage run: creates the run, builds JaCoCo, and imports the report into the shared queue."
 tools:
   [
     read,
@@ -728,8 +777,8 @@ tools:
 
 ```yaml
 ---
-name: coverage-worker
-description: "Autonomous test-writing worker. Pulls from the work queue, writes tests, reports results."
+name: brimley-coverage-worker
+description: "Autonomous local Brimley worker. Pulls from the shared queue, writes tests in the current workspace, and reports results."
 tools:
   [
     read,
@@ -746,7 +795,39 @@ tools:
 ---
 ```
 
+```yaml
+---
+name: brimley-coverage-worker-isolated
+description: "Autonomous local Brimley worker for parallel runs. Uses a dedicated git worktree and branch for source isolation while coordinating through the shared Brimley MCP queue."
+tools:
+  [
+    read,
+    search,
+    execute,
+    todo,
+    list_uncovered_classes,
+    checkout_classes,
+    complete_class,
+    fail_class,
+    release_class,
+    get_run_summary,
+    import_jacoco_report,
+  ]
+---
+```
+
+```yaml
+---
+name: brimley-jacoco-coverage-analyst
+description: "Hidden read-only helper for Brimley workers that need local JaCoCo analysis or edge-case recommendations before writing tests."
+tools: [read, search]
+user-invocable: false
+---
+```
+
 > **Note:** Whether VS Code custom agents can reference MCP tools by name in the `tools:` field depends on the current VS Code agent SDK behavior. If not, the tools are still available to any agent that has MCP tool access enabled.
+
+> **Worktree note:** Agents can create git worktrees themselves if they have terminal execution, but the current VS Code chat session may not be able to relocate into the new worktree automatically. In that case, the agent should stop after worktree creation and print the exact `cd` command and exact rerun prompt for the developer.
 
 ---
 
@@ -778,6 +859,8 @@ poetry run brimley repl --root . --watch --mcp
 | `get_run_summary`        | SQL    | tool | runs, classes | —               | seeder, worker |
 | `close_run`              | SQL    | tool | —             | runs            | seeder         |
 
+All worker tools are called through the shared `brimley-coverage-swarm` MCP server. Workers do not open the database directly, even when they run from separate git worktrees.
+
 ---
 
 ## 9. Limitations and Future Considerations
@@ -792,8 +875,10 @@ poetry run brimley repl --root . --watch --mcp
 
 5. **Worker concurrency limits.** The design supports many parallel workers, but each one runs `mvn test` which can be resource-intensive. Practical concurrency depends on machine resources. Workers that fail due to resource contention should `release_class` and exit gracefully.
 
-6. **Coverage re-import.** A worker can re-run `mvn test jacoco:report` and the seeder (or a separate re-seed step) could call `import_jacoco_report` again to refresh `post_*` metrics. The tool should handle upsert semantics (update existing rows rather than duplicating).
+6. **Coverage re-import.** A worker can re-run `mvn test jacoco:report` and then call `import_jacoco_report` again to refresh `post_*` metrics. In worktree-based runs, the import tool should accept a report path from that worker's worktree rather than assuming the daemon's current directory. The tool should handle upsert semantics (update existing rows rather than duplicating).
 
-7. **Stale checkout detection.** A future enhancement could add a `checkout_timeout` column and a `release_stale_checkouts` tool that automatically returns classes that have been checked out for too long.
+7. **Session relocation.** A worker can create its own worktree, but a VS Code chat session may not be able to switch into that worktree automatically. The fallback is a precise handoff: print the worktree path, the `cd` command, and the rerun prompt for the developer.
 
-8. **Multiple runs.** You can seed multiple runs with different scopes and run workers against each. Workers just need a `run_id` to know which queue to pull from.
+8. **Stale checkout detection.** A future enhancement could add a `checkout_timeout` column and a `release_stale_checkouts` tool that automatically returns classes that have been checked out for too long.
+
+9. **Multiple runs.** You can seed multiple runs with different scopes and run workers against each. Workers just need a `run_id` to know which queue to pull from.
