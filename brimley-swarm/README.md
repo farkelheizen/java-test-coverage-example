@@ -6,6 +6,12 @@
 poetry install --no-root
 ```
 
+# Testing
+
+```shell
+poetry run pytest
+```
+
 # Running
 
 ```shell
