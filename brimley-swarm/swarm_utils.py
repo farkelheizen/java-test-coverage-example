@@ -3,10 +3,12 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator
+from typing import Any, Iterator
 from xml.etree import ElementTree
 
 from brimley import BrimleyContext
+from sqlalchemy import text
+from sqlalchemy.engine import Connection, Engine
 
 
 @dataclass(frozen=True)
@@ -121,3 +123,52 @@ def parse_jacoco_report(report_path: Path) -> Iterator[ClassCoverage]:
 
 def encode_event_detail(detail: dict[str, object]) -> str:
     return json.dumps(detail, sort_keys=True)
+
+
+def get_engine(ctx: BrimleyContext) -> Engine:
+    engine = ctx.databases.get("default")
+    if engine is None:
+        raise ValueError("Default database connection is not configured")
+    return engine
+
+
+def insert_event(
+    conn: Connection,
+    *,
+    run_id: int,
+    event_type: str,
+    class_id: int | None = None,
+    agent_id: str | None = None,
+    detail: dict[str, object] | None = None,
+) -> None:
+    conn.execute(
+        text(
+            """
+            INSERT INTO events (run_id, class_id, event_type, agent_id, detail)
+            VALUES (:run_id, :class_id, :event_type, :agent_id, :detail)
+            """
+        ),
+        {
+            "run_id": run_id,
+            "class_id": class_id,
+            "event_type": event_type,
+            "agent_id": agent_id,
+            "detail": encode_event_detail(detail or {}),
+        },
+    )
+
+
+def get_class_row(conn: Connection, class_id: int) -> dict[str, Any] | None:
+    row = conn.execute(
+        text(
+            """
+            SELECT id, run_id, fqcn, status, checked_out_by, checked_out_at,
+                   test_file, error_message, post_instruction_coverage,
+                   post_branch_coverage
+            FROM classes
+            WHERE id = :class_id
+            """
+        ),
+        {"class_id": class_id},
+    ).mappings().one_or_none()
+    return dict(row) if row is not None else None
