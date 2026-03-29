@@ -41,6 +41,7 @@ brimley/
 logs/
 swarm.db
 swarm.db*
+brimley_assets.py
 
 # Python
 __pycache__/
